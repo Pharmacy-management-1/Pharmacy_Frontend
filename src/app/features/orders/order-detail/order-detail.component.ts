@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderHistoryService, OrderDetail } from '../../../core/services/order-history.service';
 import { QuickReorderService } from '../../../core/services/quick-reorder.service';
 import { EmailService } from '../../../core/services/email.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from 'src/app/environments/environment.prod';
 
 @Component({
   selector: 'app-order-detail',
@@ -21,7 +21,6 @@ export class OrderDetailComponent implements OnInit {
     private orderHistoryService: OrderHistoryService,
     private quickReorderService: QuickReorderService,
     private emailService: EmailService,
-    private snackBar: MatSnackBar
   ) {
     this.orderId = +this.route.snapshot.params['id'];
   }
@@ -38,7 +37,6 @@ export class OrderDetailComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.snackBar.open('Failed to load order details', 'Close', { duration: 3000 });
         this.isLoading = false;
         this.router.navigate(['/orders']);
       }
@@ -49,11 +47,9 @@ export class OrderDetailComponent implements OnInit {
     if (confirm('Are you sure you want to cancel this order?')) {
       this.orderHistoryService.cancelOrder(this.orderId).subscribe({
         next: () => {
-          this.snackBar.open('Order cancelled successfully', 'Close', { duration: 3000 });
           this.loadOrderDetails();
         },
         error: (error) => {
-          this.snackBar.open('Failed to cancel order', 'Close', { duration: 3000 });
         }
       });
     }
@@ -62,11 +58,9 @@ export class OrderDetailComponent implements OnInit {
   quickReorder(): void {
     this.quickReorderService.quickReorder(this.orderId).subscribe({
       next: (response) => {
-        this.snackBar.open('Order placed successfully!', 'Close', { duration: 3000 });
         this.router.navigate(['/orders', response.orderId]);
       },
       error: (error) => {
-        this.snackBar.open('Failed to reorder', 'Close', { duration: 3000 });
       }
     });
   }
@@ -74,10 +68,8 @@ export class OrderDetailComponent implements OnInit {
   resendConfirmation(): void {
     this.emailService.resendOrderConfirmation(this.orderId).subscribe({
       next: () => {
-        this.snackBar.open('Confirmation email sent successfully', 'Close', { duration: 3000 });
       },
       error: (error) => {
-        this.snackBar.open('Failed to send email', 'Close', { duration: 3000 });
       }
     });
   }

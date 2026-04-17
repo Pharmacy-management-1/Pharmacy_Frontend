@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
 
 // Member D Components
 import { OrderHistoryComponent } from './features/orders/order-history/order-history.component';
@@ -10,29 +9,33 @@ import { PackageListComponent } from './features/health-packages/package-list/pa
 import { PackageDetailComponent } from './features/health-packages/package-detail/package-detail.component';
 
 const routes: Routes = [
-  // Existing routes...
-  
+  // Default route (important)
+  { path: '', redirectTo: 'orders', pathMatch: 'full' },
+
   // Member D Routes
   {
     path: 'orders',
-    canActivate: [AuthGuard],
     children: [
       { path: '', component: OrderHistoryComponent },
       { path: 'quick-reorder', component: QuickReorderComponent },
       { path: ':id', component: OrderDetailComponent }
     ]
   },
+
   {
     path: 'health-packages',
     children: [
       { path: '', component: PackageListComponent },
       { path: ':id', component: PackageDetailComponent }
     ]
-  }
+  },
+
+  // Wildcard route (VERY IMPORTANT)
+  { path: '**', redirectTo: 'orders' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

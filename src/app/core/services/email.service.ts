@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/app/environments/environment.prod';
 
 export interface EmailRequest {
   to: string;
@@ -22,7 +22,7 @@ export interface EmailPreferences {
   providedIn: 'root'
 })
 export class EmailService {
-  private apiUrl = `${environment.apiUrl}/email`;
+  private apiUrl = `${environment}/email`;
 
   constructor(private http: HttpClient) {}
 
