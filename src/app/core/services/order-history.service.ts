@@ -1,53 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/app/environments/environment.prod';
+import { environment } from 'src/environments/environment';
+import { Order, OrderItem } from '../models/order.model';
 
 export interface OrderHistoryItem {
   id: number;
   orderNumber: string;
-  orderDate: Date;
+  orderDate: string;
   totalAmount: number;
   status: string;
-  prescriptionRequired: boolean;
-  prescriptionStatus?: string;
+  itemCount: number;
   items: OrderItem[];
 }
 
-export interface OrderItem {
-  productId: number;
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-}
-
-export interface OrderDetail extends OrderHistoryItem {
+export interface OrderDetail extends Order {
   shippingAddress: string;
   paymentMethod: string;
-  prescriptionUrl?: string;
-  loyaltyPointsEarned: number;
-  estimatedDeliveryDate: Date;
-  trackingInfo?: TrackingInfo;
+  items: OrderItem[];
 }
 
-export interface TrackingInfo {
-  status: string;
-  location: string;
-  timestamp: Date;
-  description: string;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class OrderHistoryService {
-  private apiUrl = `${environment.apiUrl}/orders`;
+  private apiUrl = `${environment.apiUrl}/OrderHistory`;
 
   constructor(private http: HttpClient) {}
 
+  getOrders(): Observable<OrderHistoryItem[]> {
+    return this.http.get<OrderHistoryItem[]>(this.apiUrl);
+  }
+
   getUserOrders(): Observable<OrderHistoryItem[]> {
-    return this.http.get<OrderHistoryItem[]>(`${this.apiUrl}/history`);
+    return this.getOrders();
   }
 
   getOrderDetails(orderId: number): Observable<OrderDetail> {
@@ -55,14 +39,6 @@ export class OrderHistoryService {
   }
 
   cancelOrder(orderId: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${orderId}/cancel`, {});
-  }
-
-  trackOrder(orderId: number): Observable<TrackingInfo> {
-    return this.http.get<TrackingInfo>(`${this.apiUrl}/${orderId}/track`);
-  }
-
-  reorder(orderId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${orderId}/reorder`, {});
+    return this.http.post(`${this.apiUrl}/${orderId}/cancel`, {});
   }
 }

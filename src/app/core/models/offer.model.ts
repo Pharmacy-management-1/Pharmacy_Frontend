@@ -1,14 +1,10 @@
-export interface SeasonalOffer {
+export interface Offer {
   id: number;
   title: string;
   description: string;
   discountPercentage: number;
-  code: string;
   validFrom: Date;
   validTo: Date;
-  applicableOn: 'all' | 'category' | 'specific';
-  minOrderAmount?: number;
-  maxDiscount?: number;
-  imageUrl: string;
   isActive: boolean;
+  imageUrl?: string;
 }

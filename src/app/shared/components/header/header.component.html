@@ -1,1 +1,28 @@
-<p>header works!</p>
+<header>
+  <nav class="navbar">
+    <div class="logo">
+      <a routerLink="/">Pharmacy</a>
+    </div>
+    <ul class="nav-links">
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><a routerLink="/products">Products</a></li>
+      <li routerLinkActive="active"><a routerLink="/health-packages">Health Packages</a></li>
+      <li routerLinkActive="active"><a routerLink="/offers">Offers</a></li>
+      <li *ngIf="user" routerLinkActive="active"><a routerLink="/prescriptions">Prescriptions</a></li>
+      <li *ngIf="user" routerLinkActive="active"><a routerLink="/orders">Orders</a></li>
+      <li *ngIf="user" routerLinkActive="active"><a routerLink="/cart">Cart</a></li>
+      <li *ngIf="user; else authLinks" class="profile-link">
+        <div class="dropdown">
+          <button class="dropdown-trigger">{{ user.firstName || user.username }} ({{ user.loyaltyPoints }} pts)</button>
+          <div class="dropdown-content">
+            <a routerLink="/profile">Profile</a>
+            <button type="button" class="logout-button" (click)="logout()">Logout</button>
+          </div>
+        </div>
+      </li>
+      <ng-template #authLinks>
+        <li routerLinkActive="active"><a routerLink="/login">Login</a></li>
+        <li routerLinkActive="active"><a routerLink="/register">Register</a></li>
+      </ng-template>
+    </ul>
+  </nav>
+</header>
