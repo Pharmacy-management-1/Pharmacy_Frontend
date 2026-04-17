@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderHistoryService, OrderHistoryItem } from '../../../core/services/order-history.service';
 import { QuickReorderService } from '../../../core/services/quick-reorder.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-order-history',
@@ -28,7 +27,6 @@ export class OrderHistoryComponent implements OnInit {
   constructor(
     private orderHistoryService: OrderHistoryService,
     private quickReorderService: QuickReorderService,
-    private snackBar: MatSnackBar,
     private router: Router
   ) {}
 
@@ -45,7 +43,6 @@ export class OrderHistoryComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.snackBar.open('Failed to load orders', 'Close', { duration: 3000 });
         this.isLoading = false;
       }
     });
@@ -74,11 +71,9 @@ export class OrderHistoryComponent implements OnInit {
     if (confirm('Are you sure you want to cancel this order?')) {
       this.orderHistoryService.cancelOrder(orderId).subscribe({
         next: () => {
-          this.snackBar.open('Order cancelled successfully', 'Close', { duration: 3000 });
           this.loadOrders();
         },
         error: (error) => {
-          this.snackBar.open('Failed to cancel order', 'Close', { duration: 3000 });
         }
       });
     }
@@ -87,11 +82,9 @@ export class OrderHistoryComponent implements OnInit {
   quickReorder(orderId: number): void {
     this.quickReorderService.quickReorder(orderId).subscribe({
       next: (response) => {
-        this.snackBar.open('Order placed successfully!', 'Close', { duration: 3000 });
         this.router.navigate(['/orders', response.orderId]);
       },
       error: (error) => {
-        this.snackBar.open(error.error?.message || 'Failed to reorder. Please check stock availability.', 'Close', { duration: 3000 });
       }
     });
   }

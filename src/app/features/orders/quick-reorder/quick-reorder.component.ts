@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuickReorderService, FrequentItem } from '../../../core/services/quick-reorder.service';
 import { OrderHistoryService } from '../../../core/services/order-history.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-quick-reorder',
@@ -19,7 +18,6 @@ export class QuickReorderComponent implements OnInit {
     private quickReorderService: QuickReorderService,
     private orderHistoryService: OrderHistoryService,
     private router: Router,
-    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -66,11 +64,9 @@ export class QuickReorderComponent implements OnInit {
   reorderOrder(orderId: number): void {
     this.quickReorderService.quickReorder(orderId).subscribe({
       next: (response) => {
-        this.snackBar.open('Order placed successfully!', 'Close', { duration: 3000 });
         this.router.navigate(['/orders', response.orderId]);
       },
       error: (error) => {
-        this.snackBar.open('Failed to reorder', 'Close', { duration: 3000 });
       }
     });
   }
