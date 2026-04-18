@@ -1,47 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/app/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 export interface FrequentItem {
   productId: number;
   productName: string;
-  timesOrdered: number;
-  lastOrdered: Date;
-  price: number;
-  imageUrl: string;
+  quantity: number;
+  lastOrdered: string;
 }
 
-export interface ReorderRequest {
-  orderId: number;
-  items?: { productId: number; quantity: number }[];
+export interface ReorderRecommendation {
+  productId: number;
+  productName: string;
+  reason: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class QuickReorderService {
-  private apiUrl = `${environment.apiUrl}/quick-reorder`;
+  private apiUrl = `${environment.apiUrl}/QuickReorder`;
 
   constructor(private http: HttpClient) {}
 
-  getReorderableOrders(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reorderable`);
+  getFrequentItems(): Observable<FrequentItem[]> {
+    return this.http.get<FrequentItem[]>(`${this.apiUrl}/frequent-items`);
   }
 
-  getFrequentItems(limit: number = 10): Observable<FrequentItem[]> {
-    return this.http.get<FrequentItem[]>(`${this.apiUrl}/frequent-items?limit=${limit}`);
+  getReorderRecommendations(): Observable<ReorderRecommendation[]> {
+    return this.http.get<ReorderRecommendation[]>(`${this.apiUrl}/recommendations`);
   }
 
-  quickReorder(orderId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reorder`, { orderId });
+  quickReorder(orderId: number): Observable<{ orderId: number }> {
+    return this.http.post<{ orderId: number }>(`${this.apiUrl}/reorder`, { orderId });
   }
 
-  quickReorderCustom(request: ReorderRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reorder-custom`, request);
-  }
-
-  getReorderRecommendations(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/recommendations`);
+  reorder(orderId: number): Observable<{ orderId: number }> {
+    return this.quickReorder(orderId);
   }
 }

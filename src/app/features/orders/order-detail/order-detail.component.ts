@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderHistoryService, OrderDetail } from '../../../core/services/order-history.service';
 import { QuickReorderService } from '../../../core/services/quick-reorder.service';
 import { EmailService } from '../../../core/services/email.service';
-import { environment } from 'src/app/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-order-detail',
@@ -36,7 +36,7 @@ export class OrderDetailComponent implements OnInit {
         this.order = order;
         this.isLoading = false;
       },
-      error: (error) => {
+      error: () => {
         this.isLoading = false;
         this.router.navigate(['/orders']);
       }
@@ -49,7 +49,7 @@ export class OrderDetailComponent implements OnInit {
         next: () => {
           this.loadOrderDetails();
         },
-        error: (error) => {
+        error: () => {
         }
       });
     }
@@ -60,7 +60,7 @@ export class OrderDetailComponent implements OnInit {
       next: (response) => {
         this.router.navigate(['/orders', response.orderId]);
       },
-      error: (error) => {
+      error: () => {
       }
     });
   }
@@ -69,13 +69,12 @@ export class OrderDetailComponent implements OnInit {
     this.emailService.resendOrderConfirmation(this.orderId).subscribe({
       next: () => {
       },
-      error: (error) => {
+      error: () => {
       }
     });
   }
 
   downloadInvoice(): void {
-    // Implement invoice download
     window.open(`${environment.apiUrl}/orders/${this.orderId}/invoice`, '_blank');
   }
 

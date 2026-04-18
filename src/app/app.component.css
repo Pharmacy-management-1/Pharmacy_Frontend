@@ -1,0 +1,8 @@
+main {
+  min-height: calc(100vh - 150px);
+}
+
+body.dark-theme {
+  background: #0f172a;
+  color: #e2e8f0;
+}

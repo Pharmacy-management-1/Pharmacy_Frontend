@@ -51,7 +51,7 @@
               <span class="item-quantity">Qty: {{ item.quantity }}</span>
             </div>
             <div class="item-price">
-              {{ item.totalPrice | currency }}
+              {{ (item.price * item.quantity) | currency }}
             </div>
           </div>
         </div>

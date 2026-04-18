@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-loader',
-  templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.css']
+  template: `<div class="loader">Loading...</div>`,
+  styles: [`.loader { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); }`]
 })
-export class LoaderComponent {
-
-}
+export class LoaderComponent {}
