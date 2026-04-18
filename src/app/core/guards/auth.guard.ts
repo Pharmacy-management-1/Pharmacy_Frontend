@@ -1,21 +1,5 @@
-import { Injectable } from '@angular/core';
+import { CanActivateFn } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthService {
-
-  constructor() {}
-
-  login(token: string) {
-    localStorage.setItem('token', token);
-  }
-
-  logout() {
-    localStorage.removeItem('token');
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
-  }
-}
+export const authGuard: CanActivateFn = (route, state) => {
+  return true;
+};
